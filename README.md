@@ -1,5 +1,9 @@
 # Multiple Examples per Note
-[![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://GitHub.com/Naereen/)
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<a title="Buy me a coffee :)" href="https://ko-fi.com/shorouk"><img src="https://img.shields.io/badge/ko--fi-contribute-%23579ebd.svg"></a>
+<a title="Rate on AnkiWeb" href="add link"><img src="https://glutanimate.com/logos/ankiweb-rate.svg"></a>
+
+
 
   <img style="margin:15px;" align="right" src="https://raw.githubusercontent.com/ShoroukAziz/multiple-examples-per-note/master/icons/logo.png" width="200px"  >
 
@@ -17,3 +21,10 @@ If you're learning French then the examples can be collected automatically from 
   * download the addon from [add link]()
 
 ### Configuration :
+
+
+
+
+<br>
+
+ [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://GitHub.com/Naereen/)
