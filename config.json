@@ -1,0 +1,23 @@
+{
+    "french":true,
+    "mainModels":{
+
+    "names":["french adjectives" , "french adverbs" , "french nouns" , "french verbs" ],
+    "word": "word",
+    "translated_word" : "translation",
+    "example_field": "french example",
+    "translated_example_field":"english example",
+    "examples_audio_field":"exSound"
+      },
+
+   "bankDeckName":"French sentence Bank",
+
+   "sentenceModel":{
+     "name":"french sentence",
+     "target_language_field":"french",
+     "mother_language_field":"english",
+     "audio_field":"audio"
+   },
+
+   "autoRefresh":false
+}

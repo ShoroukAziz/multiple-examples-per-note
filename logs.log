@@ -1,0 +1,15 @@
+2020-04-07 23:56:30,171:INFO:[{'fr': 'chaque mois', 'en': 'each month', 'audio': 'rec1417795933.mp3'}]
+2020-04-07 23:56:30,172:INFO:1
+2020-04-07 23:58:15,024:INFO:[{'fr': 'chaque mois', 'en': 'each month', 'audio': 'rec1417795933.mp3'}]
+2020-04-07 23:58:15,024:INFO:1
+2020-04-07 23:58:21,735:INFO:said yes
+2020-04-07 23:58:47,556:INFO:updating bank deck .....
+2020-04-07 23:58:51,965:INFO:bank retrived successfully
+2020-04-07 23:59:02,046:INFO:No new sentences were found in the main notes
+2020-04-07 23:59:06,824:INFO:bank retrived successfully
+2020-04-07 23:59:06,825:INFO:There are 12917 sentences
+2020-04-07 23:59:06,879:INFO:There are 9502 unique words
+2020-04-07 23:59:06,879:INFO:dicts created successfully
+2020-04-07 23:59:06,886:INFO:chaque
+2020-04-07 23:59:06,887:INFO:0
+2020-04-07 23:59:08,658:INFO:Updaiting The Bank Field Was Done Successfully
