@@ -1,6 +1,5 @@
 # Multiple Examples per Note
  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-<a title="Buy me a coffee :)" href="https://ko-fi.com/shorouk"><img src="https://img.shields.io/badge/ko--fi-contribute-%23579ebd.svg"></a>
 <a title="Rate on AnkiWeb" href="add link"><img src="https://glutanimate.com/logos/ankiweb-rate.svg"></a>
 
 
@@ -28,3 +27,4 @@ If you're learning French then the examples can be collected automatically from 
 <br>
 
  [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://GitHub.com/Naereen/)
+ [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B51L5RI)

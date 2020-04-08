@@ -52,16 +52,21 @@ def show():
     <center>
     <big>
     <b><i> Multiple Examples per Note </i></b> is an addon that allows you to have more than one example with audio for each note. that can be randomly changed<br>
-    Detailed description of the addon and the models can be found in the <a href="https://github.com/ShoroukAziz/French-Delights-for-Anki/wiki"> Github Wiki </a>
+    Detailed description of the addon and the models can be found in the <a href="https://github.com/ShoroukAziz/multiple-examples-per-note/wiki"> Github Wiki </a>
     <br>Develped By : <a href="https://shorouk.xyz"> Shorouk Abdelaziz </a>
     <big>
     </center>
     <center>
     <br>
-    <b><a href="https://github.com/ShoroukAziz/French-Delights-for-Anki">GitHub</a></b>
+    <b><a https://github.com/ShoroukAziz/multiple-examples-per-note">GitHub</a></b>
     </center>
     <center>
     <br>
+
+<a title="Buy me a coffee :)" href="https://ko-fi.com/shorouk"><img src="https://img.shields.io/badge/ko--fi-contribute-%23579ebd.svg"></a>
+<a title="Rate on AnkiWeb" href="add link"><img src="https://glutanimate.com/logos/ankiweb-rate.svg"></a>
+
+
     Icons made by <a href="https://www.flaticon.com/authors/freepik"
      title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 
