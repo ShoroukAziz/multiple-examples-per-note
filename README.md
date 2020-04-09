@@ -1,5 +1,5 @@
 # Multiple Examples per Note
- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <a title="Rate on AnkiWeb" href="add link"><img src="https://glutanimate.com/logos/ankiweb-rate.svg"></a>
 
 
@@ -26,5 +26,5 @@ If you're learning French then the examples can be collected automatically from 
 
 <br>
 
- [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://GitHub.com/Naereen/)
+ [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://github.com/ShoroukAziz/)
  [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B51L5RI)
