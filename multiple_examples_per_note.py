@@ -81,7 +81,7 @@ def refreshAllExamples():
 
     for modelName in mainModelsNames :
         model = mw.col.models.byName(modelName)
-        modelId = model['id']
+        modelId = str(model['id'])
         frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where mid = '"+modelId+"'")
         for id in frenchSentencesIds :
             id = str(id)[1:-2]

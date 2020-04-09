@@ -27,8 +27,7 @@ def getAllNoteIds(models):
     ids=[]
     for modelName in models :
         model = mw.col.models.byName(modelName)
-        modelId = model['id']
-
+        modelId = str(model['id'])
         notesIds = mw.col.db.all("SELECT  id  from notes where mid = '"+modelId+"'")
         for id in notesIds :
              id = str(id)[1:-2]
@@ -41,7 +40,7 @@ def getBank():
     loops over all the notes in the sentences bank and adds them to a dict  of dicts and returns that dict
     '''
     sentenceModel = mw.col.models.byName(sentenceModelName)
-    sentenceModeId = sentenceModel['id']
+    sentenceModeId = str(sentenceModel['id'])
     frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where mid = '"+sentenceModeId+"'")
 
     collectedExampleId = 0
@@ -114,7 +113,7 @@ def updateBankDeck():
     for modelName in mainModelsNames:
 
         model = mw.col.models.byName(modelName)
-        modelId = model['id']
+        modelId =str( model['id'])
         frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where mid = '"+modelId+"'")
 
         for id in frenchSentencesIds:
