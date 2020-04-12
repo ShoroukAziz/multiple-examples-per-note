@@ -2,7 +2,7 @@
     "french":true,
     "mainModels":{
 
-    "names":["french words" , "french verbs" ],
+    "names":["french words" ],
     "word": "word",
     "translated_word" : "translation",
     "example_field": "french example",
