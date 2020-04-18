@@ -39,9 +39,9 @@ def getBank():
     '''
     loops over all the notes in the sentences bank and adds them to a dict  of dicts and returns that dict
     '''
-    sentenceModel = mw.col.models.byName(sentenceModelName)
+    sentenceModel = mw.col.decks.byName(bankDeckName)
     sentenceModeId = str(sentenceModel['id'])
-    frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where mid = '"+sentenceModeId+"'")
+    frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where did = '"+sentenceModeId+"'")
 
     collectedExampleId = 0
     bank = {}
