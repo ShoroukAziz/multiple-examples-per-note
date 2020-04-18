@@ -39,15 +39,12 @@ def getBank():
     '''
     loops over all the notes in the sentences bank and adds them to a dict  of dicts and returns that dict
     '''
-    sentenceModel = mw.col.decks.byName(bankDeckName)
-    sentenceModeId = str(sentenceModel['id'])
-    frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where did = '"+sentenceModeId+"'")
+    cards = mw.col.findCards("deck:'%s'" % bankDeckName)
 
     collectedExampleId = 0
     bank = {}
-    for id in frenchSentencesIds :
-        id = str(id)[1:-2]
-        frenchSentenceNote = mw.col.getNote(id)
+    for card in cards :
+        frenchSentenceNote =  mw.col.getNote(mw.col.getCard(card).nid)
         example = {}
         example['fr']=BeautifulSoup(frenchSentenceNote[target_lang_field],'html.parser').get_text().replace("\'","’")
         example['en'] =BeautifulSoup( frenchSentenceNote[mother_lang_field],'html.parser').get_text().replace("\'","’")
