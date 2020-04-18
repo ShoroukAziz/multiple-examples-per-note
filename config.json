@@ -20,5 +20,5 @@
    },
 
    "autoRefresh":false ,
-   "matching_type" : "french"
+   "matching" : "french"
 }
