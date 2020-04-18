@@ -34,23 +34,19 @@ def updateBankField(list , note):
             garbage = []
 
 
-
-
         for ex in list:
             if (ex['fr'] not in old_french) and (ex not in garbage) :
                 old_bank.append(ex)
                 found_examples =1
 
 
-
         note['Bank'] =json.dumps(old_bank,ensure_ascii=False)
         note.flush()
 
 
-
     return found_examples
 
-def french_match (wordsDict , bankDict , word , wordType ):
+def french_match (wordsDict , bankDict , frenchWord , type ):
     examples_list = []
     if frenchWord in wordsDict:
         listOfIds = wordsDict[frenchWord]
@@ -90,10 +86,16 @@ def french_match (wordsDict , bankDict , word , wordType ):
 
     return examples_list
 
+def strict_match (wordsDict , bankDict , word ):
+    examples_list = []
+    if frenchWord in wordsDict:
+        listOfIds = wordsDict[frenchWord]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+    return examples_list
 
 
 
-def matchWordsAndExamples(ids):
+def matchWordsAndExamples(ids , matchingType):
     '''
     Updates the bank field in notes with all the matching examples found
     in the bank sentence deck or the newly found sentences
@@ -109,15 +111,14 @@ def matchWordsAndExamples(ids):
         frenchNote = mw.col.getNote(id)
         frenchWord = BeautifulSoup( frenchNote[forign_word],'html.parser').get_text().lower()
         type = BeautifulSoup( frenchNote['type'],'html.parser').get_text().lower()
-        examples_list = french_match(wordsDict , bankDict , frenchWord , type)
+        if matchingType == 'french':
+            examples_list = french_match(wordsDict , bankDict , frenchWord , type)
+        elif matchingType == 'strict':
+            examples_list = strict_match(wordsDict , bankDict , frenchWord)
 
-
-
-
-        if len(examples_list) > 0:
-            if updateBankField(examples_list , frenchNote) > 0:
-                logger.info(str(updated_notes))
-                updated_notes +=1
+        if updateBankField(examples_list , frenchNote) > 0:
+            logger.info(str(updated_notes))
+            updated_notes +=1
 
         '''
         if after updating or rebuilding the bank the main exaple is empty refresh the note to get a main example

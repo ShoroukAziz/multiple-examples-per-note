@@ -19,5 +19,6 @@
      "audio_field":"audio"
    },
 
-   "autoRefresh":false
+   "autoRefresh":false ,
+   "matching_type" : "french"
 }

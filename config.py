@@ -30,3 +30,5 @@ translated_example_field = CONFIG["mainModels"]["translated_example_field"]
 example_audio_field = CONFIG["mainModels"]["examples_audio_field"]
 
 bankDeckName = CONFIG["bankDeckName"]
+
+matching_type = CONFIG["matching"]

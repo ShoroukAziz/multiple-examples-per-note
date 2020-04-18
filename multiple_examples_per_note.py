@@ -39,7 +39,7 @@ def updateBank():
         return
 
     ids = getAllNoteIds(mainModelsNames)
-    updated = matchWordsAndExamples(ids)
+    updated = matchWordsAndExamples(ids,matching_type)
     showInfo("updated "+str(updated)+" examples")
     mw.col.reset()
     mw.reset()
@@ -50,7 +50,7 @@ def updateBankForThisNote():
     if not askUser(msg , title=ADDON_NAME):
         return
     noteId = mw.reviewer.card.note().id
-    matchWordsAndExamples([noteId])
+    matchWordsAndExamples([noteId],matching_type)
     mw.reviewer.show()
 
 
@@ -64,7 +64,7 @@ def updateBankForSelectedNotesInBrowser(self):
         tooltip(_("No cards selected."), period=2000)
         return
     for nid in self.selectedNotes():
-        matchWordsAndExamples( [nid])
+        matchWordsAndExamples( [nid] , matching_type)
 
     mw.col.reset()
     mw.reset()
