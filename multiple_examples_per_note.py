@@ -14,7 +14,7 @@ from .matching import *
 from .refreshVerbs import *
 # from .gui import run
 
-ADDON_NAME="French Delights"
+ADDON_NAME="MPER"
 ###############################################################################################
 # Use Cses:                                                                                   #
 # ---------------------------------------------------------------------------------------------
