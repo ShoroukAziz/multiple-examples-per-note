@@ -50,6 +50,47 @@ def updateBankField(list , note):
 
     return found_examples
 
+def french_match (wordsDict , bankDict , word , wordType ):
+    examples_list = []
+    if frenchWord in wordsDict:
+        listOfIds = wordsDict[frenchWord]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    if frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type)  :
+        listOfIds = wordsDict[frenchWord+"s"]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    if frenchWord+"e" in wordsDict and 'adjective' in type:
+        listOfIds = wordsDict[frenchWord+"e"]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    if "d’"+frenchWord in wordsDict and ('noun' in type or 'adjective' in type) :
+        listOfIds = wordsDict["d’"+frenchWord]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    if "l’"+frenchWord in wordsDict and ('noun' in type or 'adjective' in type) :
+        listOfIds = wordsDict["l’"+frenchWord]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    if "d’"+frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type) :
+        listOfIds = wordsDict["d’"+frenchWord+"s"]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    if "l’"+frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type) :
+        listOfIds = wordsDict["l’"+frenchWord+"s"]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    if "d’"+frenchWord+"e" in wordsDict and  'adjective' in type :
+        listOfIds = wordsDict["d’"+frenchWord+"e"]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    if "l’"+frenchWord+"e" in wordsDict and  'adjective' in type:
+        listOfIds = wordsDict["l’"+frenchWord+"e"]
+        examples_list  += [bankDict[exId] for exId in listOfIds ]
+
+    return examples_list
+
+
 
 
 def matchWordsAndExamples(ids):
@@ -68,43 +109,9 @@ def matchWordsAndExamples(ids):
         frenchNote = mw.col.getNote(id)
         frenchWord = BeautifulSoup( frenchNote[forign_word],'html.parser').get_text().lower()
         type = BeautifulSoup( frenchNote['type'],'html.parser').get_text().lower()
-        examples_list = []
+        examples_list = french_match(wordsDict , bankDict , frenchWord , type)
 
-        if frenchWord in wordsDict:
-            listOfIds = wordsDict[frenchWord]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
 
-        if frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type)  :
-            listOfIds = wordsDict[frenchWord+"s"]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-        if frenchWord+"e" in wordsDict and 'adjective' in type:
-            listOfIds = wordsDict[frenchWord+"e"]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-        if "d’"+frenchWord in wordsDict and ('noun' in type or 'adjective' in type) :
-            listOfIds = wordsDict["d’"+frenchWord]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-        if "l’"+frenchWord in wordsDict and ('noun' in type or 'adjective' in type) :
-            listOfIds = wordsDict["l’"+frenchWord]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-        if "d’"+frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type) :
-            listOfIds = wordsDict["d’"+frenchWord+"s"]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-        if "l’"+frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type) :
-            listOfIds = wordsDict["l’"+frenchWord+"s"]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-        if "d’"+frenchWord+"e" in wordsDict and  'adjective' in type :
-            listOfIds = wordsDict["d’"+frenchWord+"e"]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-        if "l’"+frenchWord+"e" in wordsDict and  'adjective' in type:
-            listOfIds = wordsDict["l’"+frenchWord+"e"]
-            examples_list  += [bankDict[exId] for exId in listOfIds ]
 
 
         if len(examples_list) > 0:
