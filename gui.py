@@ -74,9 +74,6 @@ def show():
     diag.exec_()
 
 
-actionUpdateBank = QAction("Update Bank", mw)
-actionUpdateBank.triggered.connect(updateBank)
-actionUpdateBank.setIcon(update_icon)
 
 actionRfreshAllExamples = QAction("Refresh All notes", mw)
 actionRfreshAllExamples.triggered.connect(refreshAllExamples)
@@ -87,48 +84,20 @@ actionRefreshVerbs.triggered.connect(refreshVerbs)
 actionRefreshVerbs.setIcon(search_icon)
 
 
-actionRefreshThisNote = QAction("Refresh This Note", mw)
-actionRefreshThisNote.triggered.connect(refreshOneNoteFromReviewer)
-actionRefreshThisNote.setIcon(refresh_note_icon)
-
-
-actionDeleteThisExample = QAction("Remove this Example", mw)
-actionDeleteThisExample.triggered.connect(removeThisExampleFromReviewer)
-actionDeleteThisExample.setIcon(delete_icon)
-
-actionupdateBankForThisNote = QAction("Update Bank For This Note", mw)
-actionupdateBankForThisNote.triggered.connect(updateBankForThisNote)
-actionupdateBankForThisNote.setIcon(rebuild_icon)
-
 showAbout = QAction("About", mw)
 showAbout.triggered.connect(show)
 showAbout.setIcon(about_icon)
 
-menu = QtWidgets.QMenu(ADDON_NAME, mw.form.menubar)
 
 
 
 #########################################################################################################
 
 def run():
-    menu.addAction(actionUpdateBank)
-    menu.addSeparator()
-    menu.addAction(actionRfreshAllExamples)
-    menu.addAction(actionRefreshVerbs)
-    menu.addSeparator()
-    menu.addAction(actionRefreshThisNote)
-    menu.addAction(actionDeleteThisExample)
-    menu.addAction(actionupdateBankForThisNote)
-    menu.addSeparator()
-    menu.addAction(showAbout)
-    mw.form.menubar.addMenu(menu)
+
 
     def setupMenu(self):
-        # menu = self.form.menuEdit
         menu = QtWidgets.QMenu(ADDON_NAME, self.form.menubar)
-
-        menu.addAction(actionUpdateBank)
-        menu.addSeparator()
 
         menu.addAction(actionRfreshAllExamples)
         menu.addAction(actionRefreshVerbs)
@@ -155,16 +124,9 @@ def run():
 
 
 def runNonFrench():
-    menu.addAction(actionRfreshAllExamples)
-    menu.addSeparator()
-    menu.addAction(actionRefreshThisNote)
-    menu.addSeparator()
-    menu.addAction(showAbout)
 
-    mw.form.menubar.addMenu(menu)
 
     def setupMenu(self):
-        # menu = self.form.menuEdit
         menu = QtWidgets.QMenu(ADDON_NAME, self.form.menubar)
 
 

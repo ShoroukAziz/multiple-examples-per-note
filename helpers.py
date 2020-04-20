@@ -2,6 +2,7 @@ from aqt import mw
 from bs4 import BeautifulSoup
 import logging
 import json
+import re
 import random
 from .config import *
 from aqt.utils import showInfo , askUser
@@ -45,12 +46,15 @@ def getBank():
     bank = {}
     for card in cards :
         frenchSentenceNote =  mw.col.getNote(mw.col.getCard(card).nid)
-        example = {}
-        example['fr']=BeautifulSoup(frenchSentenceNote[target_lang_field],'html.parser').get_text().replace("\'","’")
-        example['en'] =BeautifulSoup( frenchSentenceNote[mother_lang_field],'html.parser').get_text().replace("\'","’")
-        example['audio'] = BeautifulSoup( frenchSentenceNote[audio_field],'html.parser').get_text().replace("\'","’")
-        bank[collectedExampleId] = example
-        collectedExampleId += 1
+        try :
+            example = {}
+            example['fr']=BeautifulSoup(frenchSentenceNote[target_lang_field],'html.parser').get_text().replace("\'","’")
+            example['en'] =BeautifulSoup( frenchSentenceNote[mother_lang_field],'html.parser').get_text().replace("\'","’")
+            example['audio'] = BeautifulSoup( frenchSentenceNote[audio_field],'html.parser').get_text().replace("\'","’")
+            bank[collectedExampleId] = example
+            collectedExampleId += 1
+        except:
+            pass
     logger.info('bank retrived successfully')
     return bank
 
@@ -69,21 +73,33 @@ def createDict(bank):
         example['audio'] =example['audio'].split(',')[0]
         example['audio'] = example['audio'][7:-1]
         words = example['fr'].lower()
-        words = words.replace('.', '')
-        words = words.replace('?', '')
-        words = words.replace('!', '')
-        words = words.replace(',', '')
+        words = words.replace('\\xa0', ' ')
+        words = re.split('[.?!, «»()\"]',words)
 
-
-        words = words.split(" ")
         for word in words:
-            if word not in dictionary:
+            word = word.replace(" d\'","")
+            word = word.replace(" l\'","")
+            word = word.replace(" d’","")
+            word = word.replace(" l’","")
+            if word.startswith("d\'"):
+                word = word.replace("d\'","")
+            elif word.startswith("l\'"):
+                word = word.replace("l\'","")
+            elif word.startswith("d’"):
+                word = word.replace("d’","")
+            elif word.startswith("l’"):
+                word = word.replace("l’","")
+
+            if word not in dictionary and len(word) > 1:
                 idsList  = []
                 idsList.append(id)
                 dictionary[word] = idsList
-            else:
+            elif  word in dictionary:
                  dictionary[word].append(id)
 
+    from pprint import pformat
+
+    logger.info(pformat(dictionary))
     logger.info("There are "+str(len(dictionary))+" unique words")
     logger.info('dicts created successfully')
     return dictionary , bank
@@ -102,6 +118,8 @@ def updateBankDeck():
     for id in bank:
         example = bank[id]
         bankKeys.append(example['fr'])
+
+    logger.info(len(bankKeys))
 
     new_examples_list={}
 
@@ -122,7 +140,7 @@ def updateBankDeck():
             example['en'] =BeautifulSoup( frenchNote[translated_example_field],'html.parser').get_text().replace("\'","’")
             example['audio'] =BeautifulSoup( frenchNote[example_audio_field],'html.parser').get_text().replace("\'","’")
 
-            if (example['fr'] not in bankKeys  and example['en'] !=""):
+            if (example['fr'] not in bankKeys and example['fr']!=""):
                 new_examples_list[new_Examples]=example
                 new_Examples +=1
 

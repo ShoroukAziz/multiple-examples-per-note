@@ -6,7 +6,6 @@ from aqt.utils import showInfo , askUser , showText , tooltip
 import json
 
 def updateBankField(list , note):
-    logger.info(note['word'])
     found_examples = 0
     if note['doubleMeaning'] == 'y':
         englishWord = note[translation]
@@ -46,47 +45,41 @@ def updateBankField(list , note):
 
     return found_examples
 
-def french_match (wordsDict , bankDict , frenchWord , type ):
+
+
+
+
+
+def french_match (wordsDict , bankDict , frenchNote  ):
+
+    frenchWord = BeautifulSoup( frenchNote[forign_word],'html.parser').get_text().lower().replace("\'","’")
+
+    type = BeautifulSoup( frenchNote['type'],'html.parser').get_text().lower()
+    pluralWord = BeautifulSoup( frenchNote['plural'],'html.parser').get_text().lower()
+    femWord = BeautifulSoup( frenchNote['feminin version'],'html.parser').get_text().lower()
+
+
     examples_list = []
+
+
     if frenchWord in wordsDict:
         listOfIds = wordsDict[frenchWord]
         examples_list  += [bankDict[exId] for exId in listOfIds ]
 
-    if frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type)  :
-        listOfIds = wordsDict[frenchWord+"s"]
+    if pluralWord in wordsDict and pluralWord != frenchWord  :
+        listOfIds = wordsDict[pluralWord]
         examples_list  += [bankDict[exId] for exId in listOfIds ]
 
-    if frenchWord+"e" in wordsDict and 'adjective' in type:
-        listOfIds = wordsDict[frenchWord+"e"]
+    if femWord  in wordsDict and femWord != frenchWord :
+        listOfIds = wordsDict[femWord]
         examples_list  += [bankDict[exId] for exId in listOfIds ]
 
-    if "d’"+frenchWord in wordsDict and ('noun' in type or 'adjective' in type) :
-        listOfIds = wordsDict["d’"+frenchWord]
-        examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-    if "l’"+frenchWord in wordsDict and ('noun' in type or 'adjective' in type) :
-        listOfIds = wordsDict["l’"+frenchWord]
-        examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-    if "d’"+frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type) :
-        listOfIds = wordsDict["d’"+frenchWord+"s"]
-        examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-    if "l’"+frenchWord+"s" in wordsDict and ('noun' in type or 'adjective' in type) :
-        listOfIds = wordsDict["l’"+frenchWord+"s"]
-        examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-    if "d’"+frenchWord+"e" in wordsDict and  'adjective' in type :
-        listOfIds = wordsDict["d’"+frenchWord+"e"]
-        examples_list  += [bankDict[exId] for exId in listOfIds ]
-
-    if "l’"+frenchWord+"e" in wordsDict and  'adjective' in type:
-        listOfIds = wordsDict["l’"+frenchWord+"e"]
-        examples_list  += [bankDict[exId] for exId in listOfIds ]
 
     return examples_list
 
-def strict_match (wordsDict , bankDict , word ):
+def strict_match (wordsDict , bankDict , frenchNote ):
+    frenchWord = BeautifulSoup( frenchNote[forign_word],'html.parser').get_text().lower()
+    pluralWord = BeautifulSoup( frenchNote['plural'],'html.parser').get_text().lower()
     examples_list = []
     if frenchWord in wordsDict:
         listOfIds = wordsDict[frenchWord]
@@ -95,38 +88,34 @@ def strict_match (wordsDict , bankDict , word ):
 
 
 
-def matchWordsAndExamples(ids , matchingType):
+def matchWordsAndExamples(id ,res, matchingType):
     '''
     Updates the bank field in notes with all the matching examples found
     in the bank sentence deck or the newly found sentences
     '''
     updated_notes = 0
-    updateBankDeck()
-    bank = getBank()
-    res = createDict(bank)
     wordsDict = res[0]
     bankDict = res[1]
 
-    for id in ids:
-        frenchNote = mw.col.getNote(id)
+    frenchNote = mw.col.getNote(id)
+    try:
         frenchWord = BeautifulSoup( frenchNote[forign_word],'html.parser').get_text().lower()
-        type = BeautifulSoup( frenchNote['type'],'html.parser').get_text().lower()
-        if matchingType == 'french':
-            examples_list = french_match(wordsDict , bankDict , frenchWord , type)
-        elif matchingType == 'strict':
-            examples_list = strict_match(wordsDict , bankDict , frenchWord)
-
-        if updateBankField(examples_list , frenchNote) > 0:
-            logger.info(str(updated_notes))
-            updated_notes +=1
-
-        '''
-        if after updating or rebuilding the bank the main exaple is empty refresh the note to get a main example
-        '''
-        if frenchNote[example_field] == "" and frenchNote['Bank'] != "":
-            refreshOneNote (frenchNote)
+    except:
+        return
+    if matchingType == 'french':
+        examples_list = french_match(wordsDict , bankDict , frenchNote)
+    elif matchingType == 'strict':
+        examples_list = strict_match(wordsDict , bankDict , frenchNote)
 
 
-    showInfo('Updaiting The Bank Field Was Done Successfully' , title=ADDON_NAME ,  textFormat='rich')
-    logger.info('Updaiting The Bank Field Was Done Successfully')
+    if updateBankField(examples_list , frenchNote) > 0:
+        updated_notes +=1
+
+    '''
+    if after updating or rebuilding the bank the main exaple is empty refresh the note to get a main example
+    '''
+    if frenchNote[example_field] == "" and frenchNote['Bank'] != "":
+        refreshOneNote (frenchNote)
+
+
     return updated_notes
