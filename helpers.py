@@ -40,17 +40,21 @@ def getBank():
     '''
     loops over all the notes in the sentences bank and adds them to a dict  of dicts and returns that dict
     '''
-    cards = mw.col.findCards("deck:'%s'" % bankDeckName)
+    # Get the model id of the sentences notes
+    model = mw.col.models.byName(sentenceModelName)["id"]
+    notes = mw.col.findNotes("mid:"+str(model))   
+    
 
     collectedExampleId = 0
     bank = {}
-    for card in cards :
-        frenchSentenceNote =  mw.col.getNote(mw.col.getCard(card).nid)
+    for note in notes :
+        frenchSentenceNote =  mw.col.getNote(note)
         try :
             example = {}
             example['fr']=BeautifulSoup(frenchSentenceNote[target_lang_field],'html.parser').get_text().replace("\'","’")
             example['en'] =BeautifulSoup( frenchSentenceNote[mother_lang_field],'html.parser').get_text().replace("\'","’")
             example['audio'] = BeautifulSoup( frenchSentenceNote[audio_field],'html.parser').get_text().replace("\'","’")
+            example['noteId'] = frenchSentenceNote.id
             bank[collectedExampleId] = example
             collectedExampleId += 1
         except:
@@ -132,13 +136,15 @@ def updateBankDeck():
         frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where mid = '"+modelId+"'")
 
         for id in frenchSentencesIds:
-            id = str(id)[1:-2]
+            id = str(id)[1:-1]
+            id = int(id)
 
             frenchNote = mw.col.getNote(id)
             example = {}
             example['fr'] =BeautifulSoup( frenchNote[example_field],'html.parser').get_text().replace("\'","’")
             example['en'] =BeautifulSoup( frenchNote[translated_example_field],'html.parser').get_text().replace("\'","’")
             example['audio'] =BeautifulSoup( frenchNote[example_audio_field],'html.parser').get_text().replace("\'","’")
+            example['noteId'] = frenchNote.id
 
             if (example['fr'] not in bankKeys and example['fr']!=""):
                 new_examples_list[new_Examples]=example
@@ -155,11 +161,12 @@ def updateBankDeck():
             mw.col.decks.save(deck)
 
             new_note = mw.col.newNote()
+            mw.col.addNote(new_note)
             new_note[target_lang_field] = example['fr']
             new_note[mother_lang_field] = example['en']
             new_note[audio_field] = example['audio']
             new_note.flush()
-            mw.col.addNote(new_note)
+            # mw.col.addNote(new_note)
 
 
         # tooltip(_("New Notes added to sentence bank"), period=1000)
@@ -189,11 +196,13 @@ def refreshOneNote (frenchNote):
             frenchNote[example_field] = examples_list[selector]['fr']
             frenchNote[translated_example_field] = examples_list[selector]['en']
             frenchNote[example_audio_field] = "[sound:"+examples_list[selector]['audio']+"]"
+            frenchNote[example_id_field] = str(examples_list[selector]['noteId'])
             frenchNote.flush()
         else:
             frenchNote[example_field] = ""
             frenchNote[translated_example_field] = ""
             frenchNote[example_audio_field] = ""
+            frenchNote[example_id_field]=""
             frenchNote.flush()
 
 ########################################################################################################
@@ -228,4 +237,7 @@ def deleteExampleFromANote(note):
     note[example_field] = ""
     note[translated_example_field] = ""
     note[example_audio_field] = ""
+    note[example_id_field] = ""
     note.flush()
+
+########################################################################################################

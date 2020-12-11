@@ -12,7 +12,7 @@ import os , sys
 
 ADDON = os.path.dirname(os.path.abspath(__file__))
 ICONS = ADDON+'/icons'
-ADDON_NAME="MPER"
+ADDON_NAME="MPEN"
 
 CONFIG = mw.addonManager.getConfig(__name__)
 
@@ -28,6 +28,7 @@ translation =CONFIG["mainModels"]["translated_word"]
 example_field = CONFIG["mainModels"]["example_field"]
 translated_example_field = CONFIG["mainModels"]["translated_example_field"]
 example_audio_field = CONFIG["mainModels"]["examples_audio_field"]
+example_id_field = CONFIG["mainModels"]["example_id_field"]
 
 bankDeckName = CONFIG["bankDeckName"]
 

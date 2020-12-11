@@ -5,7 +5,8 @@ from PyQt5.QtWidgets import QAction, QProgressDialog, QWidget, QPushButton, QVBo
 from aqt import mw
 from .multiple_examples_per_note import *
 from .config import *
-
+from anki.hooks import addHook
+from aqt.editor import Editor
 
 
 refresh_icon = QtGui.QIcon()
@@ -92,6 +93,63 @@ showAbout.setIcon(about_icon)
 
 
 #########################################################################################################
+# Add buttons to Note Editor
+#
+#
+
+def refreshNote(editor):
+    selection = editor.note.id
+    frenchNote = mw.col.getNote(int(selection))
+    refreshOneNote(frenchNote)
+    mw.col.reset()
+    mw.reset()
+
+def updateBankforNote(editor):
+    selection = editor.note.id
+    frenchNote = mw.col.getNote(int(selection))
+    updateBankDeck()
+    bank = getBank()
+    res = createDict(bank)
+    matchWordsAndExamples( selection , res ,matching_type)
+    mw.col.reset()
+    mw.reset()
+
+
+def delMainExample(editor):
+    selection = editor.note.id
+    frenchNote = mw.col.getNote(int(selection))
+    deleteExampleFromANote(frenchNote)
+    refreshOneNote(frenchNote)
+    mw.col.reset()
+    mw.reset()
+
+def setupEditorButtons(buttons, editor):
+
+    a = editor.addButton(
+        icon = ICONS+'/refresh.png',
+        cmd="MEPNbutton1",
+        func=refreshNote,
+        tip="Refresh this notes's example "
+    )
+    b = editor.addButton(
+        icon = ICONS+'/update.png',
+        cmd="MEPNbutton2",
+        func=updateBankforNote,
+        tip="Update Bank for this note"
+    )
+    c = editor.addButton(
+    icon = ICONS+'/delete.png',
+    cmd="MEPNbutton3",
+    func=delMainExample,
+    tip="delete the main example"
+    )
+    buttons.append(a)
+    buttons.append(b)
+    buttons.append(c)
+    return buttons
+addHook("setupEditorButtons", setupEditorButtons)
+
+#########################################################################################################
 
 def run():
 
@@ -114,6 +172,10 @@ def run():
         c=menu.addAction('Update Bank for selected Notes')
         c.triggered.connect(lambda _, b=self:updateBankForSelectedNotesInBrowser(b))
         c.setIcon(rebuild_icon)
+
+        d=menu.addAction("Delte exapmle from collection")
+        d.triggered.connect(lambda _, b=self:deleteExampleFromCollection(b))
+        d.setIcon(delete_icon)
 
         menu.addSeparator()
 

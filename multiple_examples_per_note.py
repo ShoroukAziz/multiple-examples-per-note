@@ -14,7 +14,7 @@ from .matching import *
 from .refreshVerbs import *
 # from .gui import run
 
-ADDON_NAME="MPER"
+ADDON_NAME="MPEN"
 
 
 def progress(data, *args):
@@ -67,7 +67,7 @@ def refreshAllExamples():
         modelId = str(model['id'])
         frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where mid = '"+modelId+"'")
         for id in progress(frenchSentencesIds, _("Refreshing All Notes'examples"), _("Stop that!")):
-            id = str(id)[1:-2]
+            id = id[0]
             frenchNote = mw.col.getNote(id)
             refreshOneNote (frenchNote)
     mw.col.reset()
@@ -135,3 +135,50 @@ def removeThisExampleFromBrowser(self):
 
 if CONFIG['autoRefresh']:
     hooks.addHook("profileLoaded", refreshExamples)
+
+
+def deleteExampleFromCollection(self):
+    msg = "Do you Want to Delete the main Example from the collection. This will remove it from all the notes"
+    if not askUser(msg , title=ADDON_NAME):
+        return
+    mw = self.mw
+    cids = self.selectedCards()
+    if not cids:
+        tooltip(_("No cards selected."), period=2000)
+        return
+    nids= self.selectedNotes()
+
+    for nid in progress(nids, _("Deleteing selected Notes' main examples"), _("Stop that!")):
+        frenchNote = mw.col.getNote(nid)
+        exampleId = frenchNote[example_id_field]
+        # showInfo(str(exampleId))
+        if len(exampleId) > 0:
+            #delete the example from all the banks
+            modified_notes =  mw.col.db.all("SELECT  id  from notes where flds LIKE '%{}%' ".format(exampleId))
+            showInfo("{} notes had this example ... deleteing it from them".format(len(modified_notes)))
+            for id in modified_notes:
+                note = mw.col.getNote(id[0])
+                id_field = str(note[example_id_field])
+                if id_field == exampleId:
+                    note[example_field] = ""
+                    note[translated_example_field] = ""
+                    note[example_audio_field] = ""
+                    note[example_id_field] = ""
+                    note.flush()
+                    refreshOneNote(note)
+
+                bankField = note['Bank']
+                bank = json.loads(bankField)
+                for example in bank:
+                    # showInfo(example['noteId'])
+                    if str(example['noteId']) == exampleId:
+                        showInfo(str(example))
+                        bank.remove(example)
+                        note['Bank'] = json.dumps(bank,ensure_ascii=False)
+                        note.flush()
+                        pass
+
+            # delete the example note from the collection
+            mw.col.db.execute("delete from notes where id =?", exampleId)
+    mw.col.reset()
+    mw.reset()
