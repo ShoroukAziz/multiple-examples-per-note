@@ -12,5 +12,5 @@ if french:
     from .gui import run
     run()
 else :
-    from .gui import runNonFrench
-    runNonFrench()
+    from .gui import run_non_french
+    run_non_french()

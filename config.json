@@ -2,7 +2,7 @@
     "french":true,
     "mainModels":{
 
-    "names":["french words" ],
+    "names":["02 Delights - Bilingual - French" ],
     "word": "word",
     "translated_word" : "translation",
     "example_field": "french example",
@@ -11,7 +11,7 @@
     "example_id_field":"exampleID"
       },
 
-   "bankDeckName":"French sentence Bank",
+   "bankDeckName":"French Sentences Bank",
 
    "sentenceModel":{
      "name":"french sentence",

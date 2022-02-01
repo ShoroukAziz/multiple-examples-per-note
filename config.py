@@ -12,7 +12,7 @@ import os , sys
 
 ADDON = os.path.dirname(os.path.abspath(__file__))
 ICONS = ADDON+'/icons'
-ADDON_NAME="MPEN"
+ADDON_NAME = "MPEN"
 
 CONFIG = mw.addonManager.getConfig(__name__)
 
@@ -23,8 +23,8 @@ mother_lang_field = CONFIG["sentenceModel"]["mother_language_field"]
 audio_field = CONFIG["sentenceModel"]["audio_field"]
 
 mainModelsNames = CONFIG["mainModels"]["names"]
-forign_word=CONFIG["mainModels"]["word"]
-translation =CONFIG["mainModels"]["translated_word"]
+foreign_word = CONFIG["mainModels"]["word"]
+translation = CONFIG["mainModels"]["translated_word"]
 example_field = CONFIG["mainModels"]["example_field"]
 translated_example_field = CONFIG["mainModels"]["translated_example_field"]
 example_audio_field = CONFIG["mainModels"]["examples_audio_field"]

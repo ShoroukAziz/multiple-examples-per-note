@@ -1,34 +1,30 @@
-import os , sys
 from PyQt5.QtCore import QCoreApplication
-from PyQt5 import QtWidgets , QtGui
-from PyQt5.QtWidgets import QAction, QProgressDialog, QWidget, QPushButton, QVBoxLayout
-from aqt import mw
+from PyQt5 import QtWidgets, QtGui
 from .multiple_examples_per_note import *
 from .config import *
 from anki.hooks import addHook
-from aqt.editor import Editor
 
 
 refresh_icon = QtGui.QIcon()
-refresh_icon.addFile( ICONS+'/refresh.png')
+refresh_icon.addFile(ICONS + '/refresh.png')
 
 refresh_note_icon = QtGui.QIcon()
-refresh_note_icon.addFile(ICONS+'/refresh_note.png')
+refresh_note_icon.addFile(ICONS + '/refresh_note.png')
 
 delete_icon = QtGui.QIcon()
-delete_icon.addFile(ICONS+'/delete.png')
+delete_icon.addFile(ICONS + '/delete.png')
 
 search_icon = QtGui.QIcon()
-search_icon.addFile(ICONS+'/search.png')
+search_icon.addFile(ICONS + '/search.png')
 
 update_icon = QtGui.QIcon()
-update_icon.addFile(ICONS+'/update.png')
+update_icon.addFile(ICONS + '/update.png')
 
 rebuild_icon = QtGui.QIcon()
-rebuild_icon.addFile(ICONS+'/rebuild.png')
+rebuild_icon.addFile(ICONS + '/rebuild.png')
 
 about_icon = QtGui.QIcon()
-about_icon.addFile(ICONS+'/about.png')
+about_icon.addFile(ICONS + '/about.png')
 
 
 def show():
@@ -37,7 +33,7 @@ def show():
     diag.setWindowTitle(ADDON_NAME)
 
     about_icon = QtGui.QIcon()
-    about_icon.addFile(ICONS+'/about.png')
+    about_icon.addFile(ICONS + '/about.png')
     diag.setWindowIcon(about_icon)
 
     layout = QVBoxLayout(diag)
@@ -48,7 +44,7 @@ def show():
     txt = '''
     <body bgcolor="#f3f3f3">
     <center>
-    <img  src='''+ICONS+'/logo.png'+'''>
+    <img  src=''' + ICONS + '/logo.png' + '''>
     </center>
     <center>
     <big>
@@ -75,21 +71,17 @@ def show():
     diag.exec_()
 
 
-
 actionRfreshAllExamples = QAction("Refresh All notes", mw)
-actionRfreshAllExamples.triggered.connect(refreshAllExamples)
+actionRfreshAllExamples.triggered.connect(refresh_all_examples)
 actionRfreshAllExamples.setIcon(refresh_icon)
 
 actionRefreshVerbs = QAction("Find Verbs conjugations", mw)
 actionRefreshVerbs.triggered.connect(refreshVerbs)
 actionRefreshVerbs.setIcon(search_icon)
 
-
 showAbout = QAction("About", mw)
 showAbout.triggered.connect(show)
 showAbout.setIcon(about_icon)
-
-
 
 
 #########################################################################################################
@@ -97,64 +89,66 @@ showAbout.setIcon(about_icon)
 #
 #
 
-def refreshNote(editor):
+def refresh_note(editor):
     selection = editor.note.id
-    frenchNote = mw.col.getNote(int(selection))
-    refreshOneNote(frenchNote)
-    mw.col.reset()
-    mw.reset()
-
-def updateBankforNote(editor):
-    selection = editor.note.id
-    frenchNote = mw.col.getNote(int(selection))
-    updateBankDeck()
-    bank = getBank()
-    res = createDict(bank)
-    matchWordsAndExamples( selection , res ,matching_type)
+    french_note = mw.col.getNote(int(selection))
+    refresh_one_note(french_note)
     mw.col.reset()
     mw.reset()
 
 
-def delMainExample(editor):
+def update_bank_for_note(editor):
     selection = editor.note.id
-    frenchNote = mw.col.getNote(int(selection))
-    deleteExampleFromANote(frenchNote)
-    refreshOneNote(frenchNote)
+    french_note = mw.col.getNote(int(selection))
+    update_bank_deck()
+    bank = get_bank()
+    res = create_dict(bank)
+    match_words_and_examples(selection, res, matching_type)
     mw.col.reset()
     mw.reset()
 
-def setupEditorButtons(buttons, editor):
 
+def del_main_example(editor):
+    selection = editor.note.id
+    frenchNote = mw.col.getNote(int(selection))
+    delete_example_from_note(frenchNote)
+    refresh_one_note(frenchNote)
+    mw.col.reset()
+    mw.reset()
+
+
+def setup_editor_buttons(buttons, editor):
     a = editor.addButton(
-        icon = ICONS+'/refresh.png',
+        icon=ICONS + '/refresh.png',
         cmd="MEPNbutton1",
-        func=refreshNote,
+        func=refresh_note,
         tip="Refresh this notes's example "
     )
     b = editor.addButton(
-        icon = ICONS+'/update.png',
+        icon=ICONS + '/update.png',
         cmd="MEPNbutton2",
-        func=updateBankforNote,
+        func=update_bank_for_note,
         tip="Update Bank for this note"
     )
     c = editor.addButton(
-    icon = ICONS+'/delete.png',
-    cmd="MEPNbutton3",
-    func=delMainExample,
-    tip="delete the main example"
+        icon=ICONS + '/delete.png',
+        cmd="MEPNbutton3",
+        func=del_main_example,
+        tip="delete the main example"
     )
     buttons.append(a)
     buttons.append(b)
     buttons.append(c)
     return buttons
-addHook("setupEditorButtons", setupEditorButtons)
+
+
+addHook("setupEditorButtons", setup_editor_buttons)
+
 
 #########################################################################################################
 
 def run():
-
-
-    def setupMenu(self):
+    def setup_menu(self):
         menu = QtWidgets.QMenu(ADDON_NAME, self.form.menubar)
 
         menu.addAction(actionRfreshAllExamples)
@@ -162,19 +156,19 @@ def run():
         menu.addSeparator()
 
         a = menu.addAction('Refresh Selected Notes')
-        a.triggered.connect(lambda _, b=self: refreshSelectedNotesFromBrowser(b))
+        a.triggered.connect(lambda _, b=self: refresh_selected_notes_from_browser(b))
         a.setIcon(refresh_note_icon)
 
         b = menu.addAction('Remove main Examples from selected notes')
-        b.triggered.connect(lambda _, b=self: removeThisExampleFromBrowser(b))
+        b.triggered.connect(lambda _, b=self: remove_this_example_from_browser(b))
         b.setIcon(delete_icon)
 
-        c=menu.addAction('Update Bank for selected Notes')
-        c.triggered.connect(lambda _, b=self:updateBankForSelectedNotesInBrowser(b))
+        c = menu.addAction('Update Bank for selected Notes')
+        c.triggered.connect(lambda _, b=self: update_bank_for_selected_notes_in_browser(b))
         c.setIcon(rebuild_icon)
 
-        d=menu.addAction("Delte exapmle from collection")
-        d.triggered.connect(lambda _, b=self:deleteExampleFromCollection(b))
+        d = menu.addAction("Delte exapmle from collection")
+        d.triggered.connect(lambda _, b=self: deleteExampleFromCollection(b))
         d.setIcon(delete_icon)
 
         menu.addSeparator()
@@ -182,25 +176,22 @@ def run():
         menu.addAction(showAbout)
         self.form.menubar.addMenu(menu)
 
-    addHook("browser.setupMenus", setupMenu)
+    addHook("browser.setupMenus", setup_menu)
 
 
-def runNonFrench():
-
-
-    def setupMenu(self):
+def run_non_french():
+    def setup_menu(self):
         menu = QtWidgets.QMenu(ADDON_NAME, self.form.menubar)
-
 
         menu.addAction(actionRfreshAllExamples)
         menu.addSeparator()
 
         a = menu.addAction('Refresh Selected Notes')
-        a.triggered.connect(lambda _, b=self: refreshSelectedNotesFromBrowser(b))
+        a.triggered.connect(lambda _, b=self: refresh_selected_notes_from_browser(b))
         a.setIcon(refresh_note_icon)
         menu.addSeparator()
         b = menu.addAction('Remove main Examples from selected notes')
-        b.triggered.connect(lambda _, b=self: removeThisExampleFromBrowser(b))
+        b.triggered.connect(lambda _, b=self: remove_this_example_from_browser(b))
         b.setIcon(delete_icon)
 
         menu.addSeparator()
@@ -208,4 +199,4 @@ def runNonFrench():
         menu.addAction(showAbout)
         self.form.menubar.addMenu(menu)
 
-    addHook("browser.setupMenus", setupMenu)
+    addHook("browser.setupMenus", setup_menu)

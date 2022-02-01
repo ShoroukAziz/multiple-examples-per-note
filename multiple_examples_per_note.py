@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
 from anki.hooks import addHook
 from aqt import mw
-from aqt.utils import showInfo , askUser , showText , tooltip
+from aqt.utils import showInfo, askUser, showText, tooltip
 from aqt.qt import *
 import json
 import random
 import re
-import os , sys
+import os, sys
 
 from .config import *
 from .helpers import *
 from .matching import *
 from .refreshVerbs import *
+
 # from .gui import run
 
-ADDON_NAME="MPEN"
+ADDON_NAME = "MPEN"
 
 
 def progress(data, *args):
@@ -38,7 +39,8 @@ def progress(data, *args):
             raise StopIteration
         c += 1
         widget.setValue(c)
-        yield(v)
+        yield (v)
+
 
 ###############################################################################################
 # Use Cses:                                                                                   #
@@ -53,132 +55,135 @@ def progress(data, *args):
 # 5 Remove the main examples of the selected notes from the browser                           #
 ###############################################################################################
 
-def refreshAllExamples():
-    '''
+def refresh_all_examples():
+    """
     Chooses a random example from the bank field and makes it the main examples, also ensures That
-    the privously main example doesn't appear as the main example again after refreshing
-    '''
-    msg ="Refresh The Example Field In All Notes ?"
+    the previously main example doesn't appear as the main example again after refreshing
+    """
+    msg = "Refresh The Example Field In All Notes ?"
     if not askUser(msg, title=ADDON_NAME):
         return
 
-    for modelName in mainModelsNames :
+    for modelName in mainModelsNames:
         model = mw.col.models.byName(modelName)
-        modelId = str(model['id'])
-        frenchSentencesIds = mw.col.db.all("SELECT  id  from notes where mid = '"+modelId+"'")
-        for id in progress(frenchSentencesIds, _("Refreshing All Notes'examples"), _("Stop that!")):
+        model_id = str(model['id'])
+        french_sentences_ids = mw.col.db.all("SELECT  id  from notes where mid = '" + model_id + "'")
+        for id in progress(french_sentences_ids, "Refreshing All Notes' examples", "Stop that!"):
             id = id[0]
-            frenchNote = mw.col.getNote(id)
-            refreshOneNote (frenchNote)
+            french_note = mw.col.getNote(id)
+            refresh_one_note(french_note)
     mw.col.reset()
     mw.reset()
-    showInfo('Refreshing Examples Was Done Successfully' , title=ADDON_NAME ,  textFormat='rich')
+    showInfo('Refreshing Examples Was Done Successfully', title=ADDON_NAME, textFormat='rich')
     logger.info('Refreshing Examples Was Done Successfully')
 
-def updateBankForSelectedNotesInBrowser(self):
+
+def update_bank_for_selected_notes_in_browser(self):
     msg = "Update the Bank Field for The selected Notes?"
     if not askUser(msg, title=ADDON_NAME):
         return
     mw = self.mw
     cids = self.selectedCards()
     if not cids:
-        tooltip(_("No cards selected."), period=2000)
+        tooltip("No cards selected.", period=2000)
         return
-    nids= self.selectedNotes()
-    updateBankDeck()
-    bank = getBank()
-    res = createDict(bank)
+    nids = self.selectedNotes()
+    update_bank_deck()
+    bank = get_bank()
+    res = create_dict(bank)
 
-    for nid in progress(nids, _("Updating the Bank Field in selected notes"), _("Stop that!")):
+    for nid in progress(nids, "Updating the Bank Field in selected notes", "Stop that!"):
+        match_words_and_examples(nid, res, matching_type)
 
-        matchWordsAndExamples( nid , res ,matching_type)
-
-    showInfo('Updaiting The Bank Field Was Done Successfully' , title=ADDON_NAME ,  textFormat='rich')
-    logger.info('Updaiting The Bank Field Was Done Successfully')
+    showInfo('Updating The Bank Field Was Done Successfully', title=ADDON_NAME, textFormat='rich')
+    logger.info('Updating The Bank Field Was Done Successfully')
     mw.col.reset()
     mw.reset()
 
-def refreshSelectedNotesFromBrowser(self):
-    msg =  "Change The Main Example for the Selected Notes ?"
+
+def refresh_selected_notes_from_browser(self):
+    msg = "Change The Main Example for the Selected Notes ?"
     if not askUser(msg, title=ADDON_NAME):
         return
     mw = self.mw
     cids = self.selectedCards()
     if not cids:
-        tooltip(_("No cards selected."), period=2000)
+        tooltip("No cards selected.", period=2000)
         return
-    nids= self.selectedNotes()
-    for nid in progress(nids, _("Refreshing selected Notes'examples"), _("Stop that!")):
-        frenchNote = mw.col.getNote(nid)
-        refreshOneNote(frenchNote)
+    nids = self.selectedNotes()
+    for nid in progress(nids, "Refreshing selected Notes'examples", "Stop that!"):
+        french_note = mw.col.getNote(nid)
+        refresh_one_note(french_note)
     mw.col.reset()
     mw.reset()
 
-def removeThisExampleFromBrowser(self):
-    msg = "Do you Want to Delete the main Example of the selected Notes?\nNone of those examples will appear again on those notes.\nUnless, you remove them from the garbage and refresh the notes again."
-    if not askUser(msg , title=ADDON_NAME):
+
+def remove_this_example_from_browser(self):
+    msg = "Do you Want to Delete the main Example of the selected Notes?\nNone of those examples will appear again on " \
+          "those notes.\nUnless, you remove them from the garbage and refresh the notes again. "
+    if not askUser(msg, title=ADDON_NAME):
         return
 
     mw = self.mw
     cids = self.selectedCards()
     if not cids:
-        tooltip(_("No cards selected."), period=2000)
+        tooltip("No cards selected.", period=2000)
         return
-    nids= self.selectedNotes()
-    for nid in progress(nids, _("Deleteing selected Notes' main examples"), _("Stop that!")):
-        frenchNote = mw.col.getNote(nid)
-        deleteExampleFromANote(frenchNote)
-        refreshOneNote(frenchNote)
+    nids = self.selectedNotes()
+    for nid in progress(nids, "Deleteing selected Notes' main examples", "Stop that!"):
+        french_note = mw.col.getNote(nid)
+        delete_example_from_note(french_note)
+        refresh_one_note(french_note)
     mw.col.reset()
     mw.reset()
 
 
-if CONFIG['autoRefresh']:
-    hooks.addHook("profileLoaded", refreshExamples)
+# if CONFIG['autoRefresh']:
+#     hooks.addHook("profileLoaded", refreshExamples)
 
 
 def deleteExampleFromCollection(self):
     msg = "Do you Want to Delete the main Example from the collection. This will remove it from all the notes"
-    if not askUser(msg , title=ADDON_NAME):
+    if not askUser(msg, title=ADDON_NAME):
         return
     mw = self.mw
     cids = self.selectedCards()
     if not cids:
-        tooltip(_("No cards selected."), period=2000)
+        tooltip("No cards selected.", period=2000)
         return
-    nids= self.selectedNotes()
+    nids = self.selectedNotes()
 
-    for nid in progress(nids, _("Deleteing selected Notes' main examples"), _("Stop that!")):
+    for nid in progress(nids, "Deleteing selected Notes' main examples", "Stop that!"):
         frenchNote = mw.col.getNote(nid)
-        exampleId = frenchNote[example_id_field]
+        example_id = frenchNote[example_id_field]
         # showInfo(str(exampleId))
-        if len(exampleId) > 0:
-            #delete the example from all the banks
-            modified_notes =  mw.col.db.all("SELECT  id  from notes where flds LIKE '%{}%' ".format(exampleId))
-            showInfo("{} notes had this example ... deleteing it from them".format(len(modified_notes)))
+        if len(example_id) > 0:
+            # delete the example from all the banks
+            modified_notes = mw.col.db.all("SELECT  id  from notes where flds LIKE '%{}%' ".format(example_id))
+            showInfo("{} notes had this example ... deleting it from them".format(len(modified_notes)))
             for id in modified_notes:
                 note = mw.col.getNote(id[0])
                 id_field = str(note[example_id_field])
-                if id_field == exampleId:
+                if id_field == example_id:
                     note[example_field] = ""
                     note[translated_example_field] = ""
                     note[example_audio_field] = ""
                     note[example_id_field] = ""
                     note.flush()
-                    refreshOneNote(note)
+                    refresh_one_note(note)
 
-                bankField = note['Bank']
-                bank = json.loads(bankField)
+                bank_field = note['Bank']
+                bank = json.loads(bank_field)
                 for example in bank:
                     # showInfo(example['noteId'])
-                    if str(example['noteId']) == exampleId:
+                    if str(example['noteId']) == example_id:
                         showInfo(str(example))
                         bank.remove(example)
-                        note['Bank'] = json.dumps(bank,ensure_ascii=False)
+                        note['Bank'] = json.dumps(bank, ensure_ascii=False)
                         note.flush()
                         pass
 
             # delete the example note from the collection
-            mw.col.db.execute("delete from notes where id =?", exampleId)
+            mw.col.db.execute("delete from notes where id =?", example_id)
     mw.col.reset()
     mw.reset()
